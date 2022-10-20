@@ -1,10 +1,6 @@
 \documentclass[a4paper, 12pt]{article}
 \usepackage[margin=2.5cm]{geometry}
 
-% \usepackage{cmap}
-% \usepackage[T1,T2A]{fontenc}
-% \usepackage[utf8]{inputenc}
-% \usepackage[english,ukrainian]{babel}
 \usepackage{amsmath, amssymb, amsfonts}
 \usepackage{fancyhdr}
 \usepackage{mdframed}
@@ -36,7 +32,8 @@
 
 \newcommand{\task}[2]{
     \item #1
-    \begin{mdframed} \textbf{Solution. } #2 \end{mdframed}
+
+    \textbf{Solution. } #2
 }
 
 \title{CMS-COR-SAP. Exercise 1}
@@ -70,31 +67,41 @@
                   \end{align*}
               }
               \task{What is the probability of having twins, monozygotic OR dizygotic,
-                  that are both girls?}{Let's use formula of total probability:
-                  \[
-                      P(BB) = P(BB | M) P(M) + P(BB | D) P(D) = \frac{1}{2}P(M) + \frac{1}{4}P(D)
-                  \]
-                  Unfortunately, probabilities of dizygotic and monozygotic twins
-                  haven't been provided so suppose they are equal, then:
-                  \[
-                      P(BB) = \frac{1}{2} \cdot \frac{1}{2} + \frac{1}{4} \cdot \frac{1}{2} = \frac{3}{8}
-                  \]
+              that are both girls?}{Let's use formula of total probability:
+              \[
+                  P(BB) = P(BB | M) P(M) + P(BB | D) P(D) = \frac{1}{2}P(M) + \frac{1}{4}P(D)
+              \]
+              Notice, that $P(D) = 1 - P(M)$, so
+              \[
+              P(BB) = \frac{1}{2}P(M) + \frac{1}{4} (1 - P(M)) = \frac{1}{4} + \frac{1}{4} P(M)
+              \]
+              Unfortunately, probabilities of dizygotic and monozygotic twins
+              haven't been provided so suppose they are equal, then:
+              \[
+              P(BB) = \frac{1}{4} + \frac{1}{4} \cdot \frac{1}{2} = \frac{3}{8}
+              \]
               }
               \task{Knowing that the twins are both boys, what is the probability that they are monozygotic?}
               {For solve this task we are supposed to use Bayes theorem
-                  \[
-                      P(M | AA) = \frac{P(AA | M) P(M)}{P(AA)}
-                  \]
-                  Probability of having both boys is calculated as well as probability
-                  of having two girls, with use of rule of total probability
-                  \[
-                      P(AA) = P(AA | M) P(M) + P(AA | D) P(D) = \frac{1}{2}P(M) + \frac{1}{4}P(D)
+              \[
+                  P(M | AA) = \frac{P(AA | M) P(M)}{P(AA)}
+              \]
+              Probability of having both boys is calculated as well as probability
+              of having two girls, with use of rule of total probability
+              \[
+                  P(AA) = P(AA | M) P(M) + P(AA | D) P(D) = \frac{1}{2}P(M) + \frac{1}{4}P(D)
+              \]
+              Then,noticed that $P(D) = 1 - P(M)$
+              \[
+              P(M | AA) = \frac{\frac{1}{2} P(M)}{\frac{1}{2}P(M) + \frac{1}{4}P(D)} =
+              \frac{\frac{1}{2} P(M)}{\frac{1}{2}P(M) + \frac{1}{4} (1 - P(M))} =
+                  \frac{2 P(M)}{P(M) + 1}
                   \]
                   So, making the same assumption about probability of dizygotic and monozygotic twins
                   as in the previous subtask, we have
                   \[
-                      P(M | AA) = \frac{\frac{1}{2} P(M)}{\frac{1}{2}P(M) + \frac{1}{4}P(D)} =
-                      \frac{\frac{1}{4}}{\frac{3}{8}} = \frac{2}{3}
+                      P(M | AA) = \frac{2 P(M)}{P(M) + 1} =
+                      \frac{1}{\frac{3}{2}} = \frac{2}{3}
                   \]
               }
           \end{enumerate}
@@ -167,7 +174,8 @@
                   \end{center}
               }
               \task{What is the marginal distribution of Y (prob. of values of Y for all X)?}
-              {I suppose, that this subtask don't refer to previous one, so in this case distribution of $Y$ is
+              {I suppose, that this subtask don't refer to previous one (so we have to calculate marginal
+                  distribution without any conditions), so in this case distribution of $Y$ is
                   uniform and every possible result $\overline{1, 6}$ has probability $\frac{1}{6}$.}
               \task{What is the conditional probability that X = 2 given Y = 1?}
               {
@@ -230,7 +238,7 @@
               {
               Let's calculate a probability using PDF (2 hour is equal to 7200 seconds):
               \[
-                  P(t > 3600) = \int\limits_{7200}^{\infty} \lambda e^{-\lambda x} dx =
+                  P(t > 7200) = \int\limits_{7200}^{\infty} \lambda e^{-\lambda x} dx =
                   -e^{-\lambda x} \big|_{7200}^{\infty} = e^{-7200 \lambda}.
               \]
               }
