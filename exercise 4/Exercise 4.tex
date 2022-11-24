@@ -1,0 +1,231 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{fancyhdr}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+
+% set up headers
+\pagestyle{fancy}
+\setlength{\headheight}{15pt}
+\fancyhead[R]{Oleh Shkalikov}
+\fancyhead[L]{CMS-COR-SAP}
+\fancyhead[C]{{Exercise 4}}
+
+\pgfplotsset{compat=newest}
+
+% disable wrapping
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+% usable commands and definitions
+\DeclareMathOperator{\N}{\mathbb{N}}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\var}{var}
+
+\newcommand{\rbra}[1]{\left( #1 \right)}
+
+\newcommand{\sol}{
+    \paragraph{Solution}
+}
+
+\title{CMS-COR-SAP. Exercise 4}
+\author{Oleh Shkalikov}
+
+\begin{document}
+
+\maketitle
+
+\section{Proofs of the Weak Law of Large Numbers}
+\begin{enumerate}
+    \item[a)] The characteristic function is an alternative way to describe a random variable and
+        is defined as $\varphi_x(t) = \E[e^{itx}]$ for a random variable $X$.
+        Prove the weak law of large numbers by showing that the characteristic
+        function of $\overline{X}_N = \frac{1}{N} \sum\limits_{i=1}^{N} X_i $ approaches
+        $e^{it\mu}$ as $N \to \infty$.
+
+        \sol Let's write down characteristic function for mean and
+        use properties of independent random variable to derive the result
+        \[
+            \varphi_{\overline{X}_N}(t) =
+            \varphi_{\sum\limits_{i=1}^N X_i} \rbra{\frac{t}{N}} =
+            \prod\limits_{i=1}^{N} \varphi_{X_i} \rbra{\frac{t}{N}} =
+            \rbra{\varphi_{X_1} \rbra{\frac{t}{N}}}^N
+        \]
+        Then expand this expression into series and use the fact, that
+        $\varphi^{k}(0) = i^k \E X^k$:
+        \[
+            \lim\limits_{N \to \infty} \rbra{\varphi_{X_1} \rbra{\frac{t}{N}}}^N =
+            \lim\limits_{N \to \infty} \rbra{\E e^{\rbra{i \frac{t}{N} X_1}}}^N =
+            \lim\limits_{N \to \infty} \rbra{1 + \frac{i \mu t}{N} + o(t)}^N =
+            e^{i \mu t}
+        \]
+
+    \item[b)] Chebyshev’s inequality states that, for a random variable $X$ with finite mean $\mu$ and
+        variance $\sigma^2$, no more than $\frac{1}{k^2}$ of a distribution’s values can be
+        more than $k$ standard deviations away from the mean $\mu$.
+        \[
+            P(|X - \mu| \geq k \sigma) \leq \frac{1}{k^2}
+        \]
+        Another form of this inequality is:
+        \begin{equation} \label{chebyshev}
+            P(|X - \mu| \geq \epsilon) \leq \frac{\sigma^2}{\epsilon^2}
+        \end{equation}
+        Prove the weak law of large numbers using Chebyshev’s inequality by showing:
+        \[
+            \lim\limits_{N \to \infty} P (|\overline{X}_N - \mu| \geq \epsilon) = 0
+        \]
+
+        \sol Let's calculate the variance of the empirical mean of i.i.d. random values:
+        \[
+            \var\frac{1}{N} X_i =
+            \frac{1}{N^2} \sum\limits_{i=1}^{N} \var X_1 =
+            \frac{\var X_i}{N} = \frac{\sigma^2}{N}
+        \]
+        Therefore putting this variance into the \eqref{chebyshev} we get:
+        \[
+            P(|\overline{X} - \mu| \geq \epsilon) \leq \frac{\sigma^2}{N \epsilon^2} \stackrel{N \to \infty}{\to} 0
+        \]
+\end{enumerate}
+\section{Monte Carlo Integration}
+Find $\int\limits_0^1 e^x dx$ by Monte Carlo integration using a
+sample size of $N = 20$ random numbers from a uniform
+distribution $U (0, 1)$. Compute the mean and variance of the estimator.
+How does it compare with the analytical mean and variance?
+
+\sol according to law of Large Numbers the mean of estimator
+has to be equal(go to) to the integral value. So, let's calculate
+this value analytically:
+\[
+    \int\limits_0^{1} e^x dx = e - 1 \approx 1.718282
+\].
+The analytical variance of this estimator is the following
+\[
+    \var \frac{1}{N} \sum\limits_{i=1}^{N} e^{X_i} =
+    \frac{1}{N^2} \sum\limits_{i=1}^{N} \var e^{X_i} =
+    \frac{\var e^{X_1}}{N}
+\]
+In this task we are working with sampling from uniform distribution, then
+the variance is equals to:
+\[
+    \var e^{X_1} = \int\limits_{0}^{1} x^2e^x dx -
+    \rbra{\int\limits_{0}^{1} xe^x dx}^2
+\]
+Let's calculate the first integral by calculation by parts:
+\[
+    \int\limits_{0}^{1} x^2e^x dx = x^2 e^x \Big|_0^1 - 2 \int\limits_0^1 x e^x =
+    x^2 e^x \Big|_0^1 - 2xe^x \Big|_0^1 + \int\limits_0^1 e^x = 1
+\]
+From this derivation we have that
+\[
+    \int\limits_0^1 x e^x = \frac{e - 1}{2}
+\]
+Thus, the expected variance of Monte Carlo estimator is
+\[
+    \frac{\var e^{X_1}}{N} =
+    \dfrac{1 - \rbra{\frac{e - 1}{2}}^2}{N} =
+    \dfrac{1 - \rbra{\frac{e - 1}{2}}^2}{20} \approx
+    0.013094
+\]
+
+During our experiment (we have ran estimator $100$ times)
+we got as an empirical mean $ 1.7328645 $ and $0.014310$
+as an empirical variance, that perfectly match
+theoretical results.
+
+\section{Multivariate Monte Carlo Integration}
+Evaluate the double integral
+\[
+    \int\limits_1^3 \int\limits_{-1}^2 (3y - 2x^2) dx dy
+\]
+analytically and using Monte Carlo integration.
+Use sample sizes of $n = \{10, 50, 100, 500, 1000 \}$
+and plot the mean and variance vs. sample size.
+Compare the Monte Carlo integration with the analytical result.
+
+\sol
+
+First of all, let's evaluate this integral analytically
+\begin{multline*}
+    \int\limits_1^3 \int\limits_{-1}^2 (3y - 2x^2) dx dy = \\
+    \int\limits_1^3 \rbra{9y - \frac{2x^3}{3} \Bigg|^{2}_{-1}} dy =
+    \int\limits_1^3 \rbra{9y - \frac{18}{3}} dy = \\
+    \frac{9y^2}{2} \Bigg|^{3}_{1} - \frac{36}{3} =
+    \frac{72}{2} - \frac{36}{3} = 36 - 12 = 24
+\end{multline*}
+
+Then, we have evaluated given integral $100$ times for each
+sample size and got the following result:
+\begin{figure}[!ht]
+    \begin{subfigure}{.49\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                    ybar,
+                    xtick=data,
+                    xmode=log,
+                    log ticks with fixed point,]
+                \addplot+[ycomb, color=blue, mark options={black}, mark=*] table [y index=1, col sep=semicolon] {means3.csv};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Means for different $N$}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                    ybar,
+                    xtick=data,
+                    xmode=log,
+                    ymode=log,
+                    log ticks with fixed point]
+                \addplot+[ycomb, color=blue, mark options={black}, mark=*] table [y index=1, col sep=semicolon] {vars3.csv};
+                \draw[-](10,1) -- (1000, 1);
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Variations for different $N$}
+    \end{subfigure}
+\end{figure}
+
+As we can see, the empirical mean of our estimator is close to
+the real value of integral and the variance rapidly decrease with
+growing of the sample size.
+
+
+\section{Importance Sampling}
+Solve for the expectation of the function $f(x) = 10e^{-2|x-5|}$, where $x \sim U (0, 10)$,
+using simple Monte Carlo integration and importance sampling
+from a gaussian distribution $N(5, 1)$. Use a sample size of
+$N = 200$ and calculate the mean and variance of the estimator.
+What can you observe about the variance between the simple
+Monte Carlo integration and importance sampling strategies?
+
+\sol In this task we are supposed to evaluate the following
+integral:
+\[
+    \int\limits_0^{10} e^{-2|x-5|} dx
+\]
+with use of Monte Carlo method with different
+sampling distribution.
+\pagebreak
+
+We have ran MC estimators $100$ times for each sample distribution
+and got the following results:
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+                 & Uniform   & Normal    \\
+        \hline
+        Mean     & $1.00069$ & $1.00305$ \\
+        \hline
+        Variance & $0.01782$ & $0.00167$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Thus, normal sampling for this integral is by far better
+than sampling from uniform distribution.
+
+\end{document}
